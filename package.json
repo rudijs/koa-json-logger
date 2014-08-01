@@ -1,0 +1,38 @@
+{
+  "name": "koa-json-logger",
+  "version": "0.0.1",
+  "description": "KoaJS HTTP and uncaught downstream Error JSON format logger",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rudijs/koa-json-logger.git"
+  },
+  "main": "index.js",
+  "scripts": {
+    "test": "node --harmony node_modules/istanbul/lib/cli.js cover node_modules/mocha/bin/_mocha --root lib/ --dir test/coverage  -- -u exports -R spec"
+  },
+  "keywords": [
+    "koa",
+    "koajs",
+    "logger",
+    "json"
+  ],
+  "author": {
+    "name": "Rudi Starcevic",
+    "email": "ooly.me@gmail.com"
+  },
+  "license": "MIT",
+  "engines" : {
+    "node" : ">=0.11.13"
+  },
+  "devDependencies": {
+    "chai": "^1.9.1",
+    "istanbul": "git://github.com/gotwarlost/istanbul.git#harmony",
+    "jshint": "^2.5.2",
+    "koa": "^0.8.2",
+    "mocha": "^1.21.3",
+    "supertest": "^0.13.0"
+  },
+  "dependencies": {
+    "bunyan": "^0.23.1"
+  }
+}
