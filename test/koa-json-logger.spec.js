@@ -7,7 +7,7 @@ var should = require('chai').should(),
   readline = require('readline'),
   stream = require('stream');
 
-var koaLoggerJson = require('../lib/koa-json-logger'),
+var koaJsonLogger = require('../lib/koa-json-logger'),
   testLogFiles = [
     'log/test.log',
     'log/myapp.log',
@@ -38,7 +38,7 @@ describe('JSON Logger middleware', function () {
 
     it('should log info level', function (done) {
 
-      app.use(koaLoggerJson());
+      app.use(koaJsonLogger());
 
       // default route for test
       app.use(function *(next) {
@@ -86,7 +86,7 @@ describe('JSON Logger middleware', function () {
 
     beforeEach(function (done) {
 
-      app.use(koaLoggerJson({
+      app.use(koaJsonLogger({
         name: 'unitTest',
         streams: [
           {
