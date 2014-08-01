@@ -20,13 +20,13 @@ describe('JSON Logger middleware', function () {
   beforeEach(function (done) {
 
     // clear out test log files
-//    testLogFiles.forEach(function (logFile) {
-//      fs.exists(logFile, function (file) {
-//        if (file) {
-//          fs.unlinkSync(logFile);
-//        }
-//      });
-//    });
+    testLogFiles.forEach(function (logFile) {
+      fs.exists(logFile, function (file) {
+        if (file) {
+          fs.unlinkSync(logFile);
+        }
+      });
+    });
 
     app = koa();
 
@@ -34,51 +34,51 @@ describe('JSON Logger middleware', function () {
 
   });
 
-//  describe('using default options', function () {
-//
-//    it('should log info level', function (done) {
-//
-//      app.use(koaJsonLogger());
-//
-//      // default route for test
-//      app.use(function *(next) {
-//        this.body = 'Test Response is OK.';
-//        yield next;
-//      });
-//
-//      request(app.listen())
-//        .get('/')
-//        .expect(200)
-//        .end(function (err, res) {
-//          if (err) {
-//            should.not.exist(err);
-//            return done(err);
-//          }
-//
-//          // test http response
-//          res.text.should.equal('Test Response is OK.');
-//
-//          // read in log file entry
-//          fs.readFile('log/myapp.log', function (err, data) {
-//            if (err) {
-//              throw err;
-//            }
-//
-//            // test JSON parsed log entry
-//            var logEntry = JSON.parse(data.toString());
-//            logEntry.name.should.equal('myapp');
-//            logEntry.req.method.should.equal('GET');
-//            logEntry.req.url.should.equal('/');
-//            logEntry.msg.should.equal('GET /');
-//
-//            done();
-//          });
-//
-//        });
-//
-//    });
-//
-//  });
+  describe('using default options', function () {
+
+    it('should log info level', function (done) {
+
+      app.use(koaJsonLogger());
+
+      // default route for test
+      app.use(function *(next) {
+        this.body = 'Test Response is OK.';
+        yield next;
+      });
+
+      request(app.listen())
+        .get('/')
+        .expect(200)
+        .end(function (err, res) {
+          if (err) {
+            should.not.exist(err);
+            return done(err);
+          }
+
+          // test http response
+          res.text.should.equal('Test Response is OK.');
+
+          // read in log file entry
+          fs.readFile('log/myapp.log', function (err, data) {
+            if (err) {
+              throw err;
+            }
+
+            // test JSON parsed log entry
+            var logEntry = JSON.parse(data.toString());
+            logEntry.name.should.equal('myapp');
+            logEntry.req.method.should.equal('GET');
+            logEntry.req.url.should.equal('/');
+            logEntry.msg.should.equal('GET /');
+
+            done();
+          });
+
+        });
+
+    });
+
+  });
 
   describe('using non default options', function () {
 
@@ -99,45 +99,45 @@ describe('JSON Logger middleware', function () {
       done();
     });
 
-//    it('should log info level', function (done) {
-//
-//      // default route for test
-//      app.use(function *(next) {
-//        this.body = 'Test Response is OK.';
-//        yield next;
-//      });
-//
-//      request(app.listen())
-//        .get('/')
-//        .expect(200)
-//        .end(function (err, res) {
-//          if (err) {
-//            should.not.exist(err);
-//            return done(err);
-//          }
-//
-//          // test http response
-//          res.text.should.equal('Test Response is OK.');
-//
-//          // read in log file entry
-//          fs.readFile(testLogFile, function (err, data) {
-//            if (err) {
-//              throw err;
-//            }
-//
-//            // test JSON parsed log entry
-//            var logEntry = JSON.parse(data.toString());
-//            logEntry.name.should.equal('unitTest');
-//            logEntry.req.method.should.equal('GET');
-//            logEntry.req.url.should.equal('/');
-//            logEntry.msg.should.equal('GET /');
-//
-//            done();
-//          });
-//
-//        });
-//
-//    });
+    it('should log info level', function (done) {
+
+      // default route for test
+      app.use(function *(next) {
+        this.body = 'Test Response is OK.';
+        yield next;
+      });
+
+      request(app.listen())
+        .get('/')
+        .expect(200)
+        .end(function (err, res) {
+          if (err) {
+            should.not.exist(err);
+            return done(err);
+          }
+
+          // test http response
+          res.text.should.equal('Test Response is OK.');
+
+          // read in log file entry
+          fs.readFile(testLogFile, function (err, data) {
+            if (err) {
+              throw err;
+            }
+
+            // test JSON parsed log entry
+            var logEntry = JSON.parse(data.toString());
+            logEntry.name.should.equal('unitTest');
+            logEntry.req.method.should.equal('GET');
+            logEntry.req.url.should.equal('/');
+            logEntry.msg.should.equal('GET /');
+
+            done();
+          });
+
+        });
+
+    });
 
     it('should log error level', function (done) {
 
@@ -198,30 +198,30 @@ describe('JSON Logger middleware', function () {
 
     });
 
-//    it('should log errors to console in development mode', function (done) {
-//
-//      process.env.NODE_ENV = 'development';
-//
-//      // default test route throw error
-//      app.use(function *route1(next) {
-//        yield next;
-//        throw new Error('Oops! Something blew up.');
-//      });
-//
-//      request(app.listen())
-//        .get('/')
-//        .expect(500)
-//        .end(function (err, res) {
-//          if (err) {
-//            should.not.exist(err);
-//            return done(err);
-//          }
-//          res.text.should.equal('Internal Server Error');
-//          done();
-//
-//        });
-//
-//    });
+    it('should log errors to console in development mode', function (done) {
+
+      process.env.NODE_ENV = 'development';
+
+      // default test route throw error
+      app.use(function *route1(next) {
+        yield next;
+        throw new Error('Oops! Something blew up.');
+      });
+
+      request(app.listen())
+        .get('/')
+        .expect(500)
+        .end(function (err, res) {
+          if (err) {
+            should.not.exist(err);
+            return done(err);
+          }
+          res.text.should.equal('Internal Server Error');
+          done();
+
+        });
+
+    });
 
   });
 
