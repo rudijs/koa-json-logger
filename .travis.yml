@@ -7,6 +7,9 @@ before_script:
   - npm install
 script:
   - npm test
+  - ./node_modules/jshint/bin/jshint index.js
+  - ./node_modules/jshint/bin/jshint lib/**/*.js
+  - ./node_modules/jshint/bin/jshint test/*.js
 after_failure:
   - ls -1 log
   - cat log/*
