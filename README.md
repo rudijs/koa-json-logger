@@ -1,11 +1,20 @@
 koa-json-logger
 ===============
 
-KoaJS HTTP and uncaught downstream Error JSON format logger
+KoaJS HTTP Request/Response and uncaught downstream Error JSON format logger
+
+[![Build Status](https://travis-ci.org/rudijs/koa-json-logger.svg?branch=master)](https://travis-ci.org/rudijs/koa-json-logger)
 
 The actual logging is done with [node-bunyan](https://github.com/trentm/node-bunyan)
 
-Inspired by [KoaJS](https://github.com/koajs), [express-winston](https://github.com/heapsource/express-winston), [node-bunyan](https://github.com/trentm/node-bunyan) and [KoaJS Logger](https://github.com/koajs/logger)
+Credits and inspired by:
+
+* [KoaJS](https://github.com/koajs)
+* [express-winston](https://github.com/heapsource/express-winston)
+* [node-bunyan](https://github.com/trentm/node-bunyan)
+* [koa-bunyan](https://github.com/ivpusic/koa-bunyan)
+* [KoaJS Logger](https://github.com/koajs/logger)
+
 
 Code review, suggestions and pull requests very much welcome - thanks!
 
@@ -118,8 +127,10 @@ git clone the full repo: `git clone git@github.com:rudijs/koa-json-logger.git`
 `npm test`
 
 
-## Linting
+## Code Linting
 
 `./node_modules/jshint/bin/jshint index.js` 
 
-`./node_modules/jshint/bin/jshint test/koa-json-logger.spec.js`
+`./node_modules/jshint/bin/jshint lib/**/*.js`
+
+`./node_modules/jshint/bin/jshint test/*.js`
