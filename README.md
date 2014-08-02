@@ -1,7 +1,7 @@
 koa-json-logger
 ===============
 
-KoaJS HTTP and uncaught downstream Error JSON format logger
+KoaJS HTTP request/response and uncaught downstream Error JSON format logger
 
 The actual logging is done with [node-bunyan](https://github.com/trentm/node-bunyan)
 
