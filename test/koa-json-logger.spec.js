@@ -18,7 +18,6 @@ var koaJsonLogger = require('../lib/koa-json-logger'),
 describe('JSON Logger middleware', function () {
 
   beforeEach(function (done) {
-
     // clear out test log files
     testLogFiles.forEach(function (logFile) {
       fs.exists(logFile, function (file) {
@@ -27,11 +26,12 @@ describe('JSON Logger middleware', function () {
         }
       });
     });
-
-    app = koa();
-
     done();
+  });
 
+  beforeEach(function (done) {
+    app = koa();
+    done();
   });
 
   describe('using default options', function () {
