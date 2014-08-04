@@ -1,6 +1,6 @@
 {
   "name": "koa-json-logger",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "KoaJS HTTP and uncaught downstream Error JSON format logger",
   "repository": {
     "type": "git",
