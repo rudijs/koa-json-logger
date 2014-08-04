@@ -4,6 +4,8 @@ koa-json-logger
 KoaJS HTTP Request/Response and uncaught downstream Error JSON format logger
 
 [![Build Status](https://travis-ci.org/rudijs/koa-json-logger.svg?branch=master)](https://travis-ci.org/rudijs/koa-json-logger)
+[![NPM version](https://badge.fury.io/js/koa-json-logger.svg)](http://badge.fury.io/js/koa-json-logger)
+[![Dependency Status](https://gemnasium.com/rudijs/koa-json-logger.svg)](https://gemnasium.com/rudijs/koa-json-logger)
 
 The actual logging is done with [node-bunyan](https://github.com/trentm/node-bunyan)
 
