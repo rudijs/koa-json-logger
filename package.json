@@ -1,6 +1,6 @@
 {
   "name": "koa-json-logger",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "KoaJS HTTP Request/Response and uncaught downstream Error JSON format logger",
   "repository": {
     "type": "git",
@@ -8,7 +8,8 @@
   },
   "main": "./lib/koa-json-logger.js",
   "scripts": {
-    "test": "node --harmony node_modules/istanbul/lib/cli.js cover node_modules/mocha/bin/_mocha --root lib/ --dir test/coverage  -- -u exports -R spec"
+    "test": "node --harmony node_modules/istanbul/lib/cli.js cover node_modules/mocha/bin/_mocha --root lib/ --dir test/coverage  -- -u exports -R spec",
+    "coveralls": "node --harmony node_modules/istanbul/lib/cli.js cover node_modules/mocha/bin/_mocha --root lib/ --dir test/coverage  -- -u exports -R spec && cat ./test/coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
   },
   "keywords": [
     "koa",
@@ -21,11 +22,12 @@
     "email": "ooly.me@gmail.com"
   },
   "license": "MIT",
-  "engines" : {
-    "node" : ">=0.11.13"
+  "engines": {
+    "node": ">=0.11.13"
   },
   "devDependencies": {
     "chai": "^1.9.1",
+    "coveralls": "^2.11.1",
     "istanbul": "git://github.com/gotwarlost/istanbul.git#harmony",
     "jshint": "^2.5.2",
     "koa": "^0.8.2",
