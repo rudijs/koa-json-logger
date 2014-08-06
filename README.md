@@ -145,8 +145,6 @@ git clone the full repo: `git clone git@github.com:rudijs/koa-json-logger.git`
 
 ## Code Linting
 
-`./node_modules/jshint/bin/jshint index.js` 
-
 `./node_modules/jshint/bin/jshint lib/**/*.js`
 
 `./node_modules/jshint/bin/jshint test/*.js`
