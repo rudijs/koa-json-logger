@@ -20,62 +20,76 @@ Credits and inspired by:
 
 Code review, suggestions and pull requests very much welcome - thanks!
 
-## Sample 200 Log Entry
-
-    {"name":"myapp","hostname":"dev","pid":1106,"level":30,"req":{"method":"GET","url":"/users/539d77e8cd4e834b710a103a"},"res":{"status":200},"msg":"GET /users/539d77e8cd4e834b710a103a","time":"2014-08-01T06:31:20.612Z","v":0}
-
 ## Sample 200 Log Entry (pretty print)
 
-    {
-      "name": "myapp",
-      "hostname": "dev",
-      "pid": 1106,
-      "level": 30,
-      "req": {
-        "method": "GET",
-        "url": "\/users\/539d77e8cd4e834b710a103a"
-      },
-      "res": {
-        "status": 200
-      },
-      "msg": "GET \/users\/539d77e8cd4e834b710a103a",
-      "time": "2014-08-01T06:31:20.612Z",
-      "v": 0
+    {  
+       "name":"myapp",
+       "hostname":"dev",
+       "pid":16345,
+       "level":30,
+       "req":{  
+          "url":"/users/539d77e8cd4e834b710a103a",
+          "headers":{  
+             "user-agent":"curl/7.22.0 (x86_64-pc-linux-gnu) libcurl/7.22.0 OpenSSL/1.0.1 zlib/1.2.3.4 libidn/1.23 librtmp/2.3",
+             "host":"127.0.0.1:3000",
+             "accept":"*/*",
+          },
+          "method":"GET",
+          "originalUrl":"/users/539d77e8cd4e834b710a103a",
+          "query":{  
+    
+          }
+       },
+       "res":{  
+          "statusCode":200,
+          "responseTime":14
+       },
+       "msg":"GET /users/539d77e8cd4e834b710a103a",
+       "time":"2014-08-06T09:02:02.117Z",
+       "v":0
     }
 
    
-## Sample 500 Log Entry - two log entries for errors. The error and the request
+## Sample 500 Log Entry, two log entries for errors. The error and the request (pretty print)
 
-    {"name":"unitTest","hostname":"dev","pid":1468,"level":50,"err":"Error: Oops! Something blew up.\n    at Object.route2 (/media/crypt2/projects/koa-json-logger/test/koa-json-logger.spec.js:154:15)\n    at GeneratorFunctionPrototype.next (native)\n    at Object.next (/media/crypt2/projects/koa-json-logger/node_modules/koa/node_modules/co/index.js:74:21)\n    at Object.<anonymous> (/media/crypt2/projects/koa-json-logger/node_modules/koa/node_modules/co/index.js:93:18)\n    at Immediate._onImmediate (/media/crypt2/projects/koa-json-logger/node_modules/koa/node_modules/co/index.js:52:14)\n    at processImmediate [as _immediateCallback] (timers.js:374:17)","msg":"GET /","time":"2014-08-01T06:34:26.752Z","v":0}
-    {"name":"unitTest","hostname":"dev","pid":1468,"level":30,"req":{"method":"GET","url":"/"},"res":{"status":500},"msg":"GET /","time":"2014-08-01T06:34:26.756Z","v":0}
-
-## Sample 500 Log Entry (pretty print)
-
-    {
-      "name": "unitTest",
-      "hostname": "dev",
-      "pid": 1468,
-      "level": 50,
-      "err": "Error: Oops! Something blew up.\n    at Object.route2 (\/media\/crypt2\/projects\/koa-json-logger\/test\/koa-json-logger.spec.js:154:15)\n    at GeneratorFunctionPrototype.next (native)\n    at Object.next (\/media\/crypt2\/projects\/koa-json-logger\/node_modules\/koa\/node_modules\/co\/index.js:74:21)\n    at Object.<anonymous> (\/media\/crypt2\/projects\/koa-json-logger\/node_modules\/koa\/node_modules\/co\/index.js:93:18)\n    at Immediate._onImmediate (\/media\/crypt2\/projects\/koa-json-logger\/node_modules\/koa\/node_modules\/co\/index.js:52:14)\n    at processImmediate [as _immediateCallback] (timers.js:374:17)",
-      "msg": "GET \/",
-      "time": "2014-08-01T06:34:26.752Z",
-      "v": 0
+    {  
+       "name":"unitTest",
+       "hostname":"dev",
+       "pid":21494,
+       "level":50,
+       "err":"Error: Oops! Something blew up.\n    at Object.route1 (/media/crypt2/projects/koa-json-logger/test/koa-json-logger.spec.js:208:15)\n    at GeneratorFunctionPrototype.next (native)\n    at Object.next (/media/crypt2/projects/koa-json-logger/node_modules/koa/node_modules/co/index.js:74:21)\n    at Object.<anonymous> (/media/crypt2/projects/koa-json-logger/node_modules/koa/node_modules/co/index.js:93:18)\n    at Immediate._onImmediate (/media/crypt2/projects/koa-json-logger/node_modules/koa/node_modules/co/index.js:52:14)\n    at processImmediate [as _immediateCallback] (timers.js:374:17)",
+       "msg":"GET /",
+       "time":"2014-08-04T14:33:01.581Z",
+       "v":0
     }
-    {
-      "name": "unitTest",
-      "hostname": "dev",
-      "pid": 1468,
-      "level": 30,
-      "req": {
-        "method": "GET",
-        "url": "\/"
-      },
-      "res": {
-        "status": 500
-      },
-      "msg": "GET \/",
-      "time": "2014-08-01T06:34:26.756Z",
-      "v": 0
+
+    {  
+       "name":"unitTest",
+       "hostname":"dev",
+       "pid":21494,
+       "level":30,
+       "req":{  
+          "url":"/",
+          "headers":{  
+             "host":"127.0.0.1:50762",
+             "accept-encoding":"gzip, deflate",
+             "cookie":"",
+             "user-agent":"node-superagent/0.18.0",
+             "connection":"close"
+          },
+          "method":"GET",
+          "originalUrl":"/",
+          "query":{  
+    
+          }
+       },
+       "res":{  
+          "statusCode":500,
+          "responseTime":2
+       },
+       "msg":"GET /",
+       "time":"2014-08-04T14:33:01.583Z",
+       "v":0
     }
 
 ## Install
@@ -130,8 +144,6 @@ git clone the full repo: `git clone git@github.com:rudijs/koa-json-logger.git`
 
 
 ## Code Linting
-
-`./node_modules/jshint/bin/jshint index.js` 
 
 `./node_modules/jshint/bin/jshint lib/**/*.js`
 
