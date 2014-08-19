@@ -105,29 +105,21 @@ Code review, suggestions and pull requests very much welcome - thanks!
 
 I suggest it's best to use this middleware very first in the stack so any and all downstream uncaught errors are logged.
 
-Default will log to a relative `log/` directory so you'll need to create this folder.
+Logs will go into a `log/` directory relative to file that instruments the Koa app, so you'll need to create this folder.
  
 Default use will create two log files:
 
-`log/myapp.log` will contain req/res log entries plus error log entries
+`log/myapp.log` will contain req/res log entries.
 
-`log/myapp-error.log` will contain error log entries only.
-
-Note: this current behavior means error logs will be duplicate - one in each file.
+`log/myapp_error.log` will contain error log entries.
 
 Log files have daily rotation and keeps 3 back copies.
 
-If you prefer req/res and error log entries to be in a single file you can pass in some bunyan streams config like this:
+Currently the only supported config options are `name` which configures the log file name and name property of the log entry.
 
       app.use(koaJsonLogger({
-        name: 'myCoolApp',
-        streams: [{
-            level: 'info',
-            path: 'log/app.log'
-          }]
+        name: 'myCoolApp'
       }));
-
-Currently the only supported config options are `name`, `streams` and `level`
 
 Please review the test suite for further details.
 
