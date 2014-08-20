@@ -21,77 +21,24 @@ Credits and inspired by:
 
 Code review, suggestions and pull requests very much welcome - thanks!
 
-## Sample 200 Log Entry (pretty print)
+## Overview
 
-    {  
-       "name":"myapp",
-       "hostname":"dev",
-       "pid":16345,
-       "level":30,
-       "req":{  
-          "url":"/users/539d77e8cd4e834b710a103a",
-          "headers":{  
-             "user-agent":"curl/7.22.0 (x86_64-pc-linux-gnu) libcurl/7.22.0 OpenSSL/1.0.1 zlib/1.2.3.4 libidn/1.23 librtmp/2.3",
-             "host":"127.0.0.1:3000",
-             "accept":"*/*",
-          },
-          "method":"GET",
-          "originalUrl":"/users/539d77e8cd4e834b710a103a",
-          "query":{  
-    
-          }
-       },
-       "res":{  
-          "statusCode":200,
-          "responseTime":14
-       },
-       "msg":"GET /users/539d77e8cd4e834b710a103a",
-       "time":"2014-08-06T09:02:02.117Z",
-       "v":0
-    }
+The basic goal of this module is to create log entries in JSON format for each HTTP request.
 
-   
-## Sample 500 Log Entry, two log entries for errors. The error and the request (pretty print)
+Success (<400) log entries will contain Request details, Response status code and Response time.
 
-    {  
-       "name":"unitTest",
-       "hostname":"dev",
-       "pid":21494,
-       "level":50,
-       "err":"Error: Oops! Something blew up.\n    at Object.route1 (/media/crypt2/projects/koa-json-logger/test/koa-json-logger.spec.js:208:15)\n    at GeneratorFunctionPrototype.next (native)\n    at Object.next (/media/crypt2/projects/koa-json-logger/node_modules/koa/node_modules/co/index.js:74:21)\n    at Object.<anonymous> (/media/crypt2/projects/koa-json-logger/node_modules/koa/node_modules/co/index.js:93:18)\n    at Immediate._onImmediate (/media/crypt2/projects/koa-json-logger/node_modules/koa/node_modules/co/index.js:52:14)\n    at processImmediate [as _immediateCallback] (timers.js:374:17)",
-       "msg":"GET /",
-       "time":"2014-08-04T14:33:01.581Z",
-       "v":0
-    }
+Error (>=400) log entries will contain Request details, Response status code, Response time and Error details.
 
-    {  
-       "name":"unitTest",
-       "hostname":"dev",
-       "pid":21494,
-       "level":30,
-       "req":{  
-          "url":"/",
-          "headers":{  
-             "host":"127.0.0.1:50762",
-             "accept-encoding":"gzip, deflate",
-             "cookie":"",
-             "user-agent":"node-superagent/0.18.0",
-             "connection":"close"
-          },
-          "method":"GET",
-          "originalUrl":"/",
-          "query":{  
-    
-          }
-       },
-       "res":{  
-          "statusCode":500,
-          "responseTime":2
-       },
-       "msg":"GET /",
-       "time":"2014-08-04T14:33:01.583Z",
-       "v":0
-    }
+Success and Error logs will have their own file (two files).
+
+Higher level goals are:
+
+- Create uniform success and error log entries in JSON format for centralized logging
+- In particular the ELK stack (Logstash, Elasticsearch and Kibana)
+- A unique ID (RFC4122 uuid v4) is also created for each log entry.
+- This uuid can be used in other application logs, which end up in ELK, so you can correlate the request or error to other custom log entries.
+
+Below will be some sample log entries in pretty print and also some screen shots of how they look in Kibana.
 
 ## Install
 
@@ -103,7 +50,7 @@ Code review, suggestions and pull requests very much welcome - thanks!
 
 `app.use(koaJsonLogger());`
 
-I suggest it's best to use this middleware very first in the stack so any and all downstream uncaught errors are logged.
+I suggest it's best to use this middleware high in the middleware stack so any and all downstream uncaught errors are logged.
 
 Logs will go into a `log/` directory relative to file that instruments the Koa app, so you'll need to create this folder.
  
@@ -120,6 +67,15 @@ Currently the only supported config options are `name` which configures the log 
       app.use(koaJsonLogger({
         name: 'myCoolApp'
       }));
+
+When you throw an application error it's best to always use `this.throw`
+
+Example: `this.throw(403, 'Access Denied');`
+
+You can throw errors this way but they will be silently *not* logged - so best *not* to do it this way:
+
+    this.status = 401;
+    this.body = 'Access Denied';
 
 Please review the test suite for further details.
 
@@ -141,3 +97,90 @@ git clone the full repo: `git clone git@github.com:rudijs/koa-json-logger.git`
 `./node_modules/jshint/bin/jshint lib/**/*.js`
 
 `./node_modules/jshint/bin/jshint test/*.js`
+
+
+## Sample Success Log Entry (pretty print)
+
+	{
+	   "name":"myapp",
+	   "hostname":"dev",
+	   "pid":23816,
+	   "level":30,
+	   "req":{
+	      "uuid":"04c41cbc-022c-43e0-846b-81922e5e4aa2",
+	      "url":"/users/539d77e8cd4e834b710a103a",
+	      "headers":{
+		 "host":"127.0.0.1:3000",
+		 "connection":"keep-alive",
+		 "cache-control":"no-cache",
+		 "user-agent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.152 Safari/537.36",
+		 "accept":"*/*",
+		 "accept-encoding":"gzip,deflate,sdch",
+		 "accept-language":"en-US,en;q=0.8"
+	      },
+	      "method":"GET",
+	      "originalUrl":"/users/539d77e8cd4e834b710a103a",
+	      "query":{
+
+	      }
+	   },
+	   "res":{
+	      "statusCode":200,
+	      "responseTime":4
+	   },
+	   "msg":"GET /users/539d77e8cd4e834b710a103a",
+	   "time":"2014-08-20T14:59:47.257Z",
+	   "v":0
+	}
+
+## Sample Error Log Entry (pretty print)
+
+	{
+	   "name":"myapp",
+	   "hostname":"dev",
+	   "pid":23816,
+	   "level":50,
+	   "req":{
+	      "uuid":"3abbb7d7-e9c3-48ab-8ba9-da3db000592f",
+	      "url":"/users/123",
+	      "headers":{
+		 "host":"127.0.0.1:3000",
+		 "connection":"keep-alive",
+		 "cache-control":"no-cache",
+		 "user-agent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.152 Safari/537.36",
+		 "accept":"*/*",
+		 "accept-encoding":"gzip,deflate,sdch",
+		 "accept-language":"en-US,en;q=0.8"
+	      },
+	      "method":"GET",
+	      "originalUrl":"/users/123",
+	      "query":{
+
+	      }
+	   },
+	   "res":{
+	      "statusCode":400,
+	      "responseTime":8
+	   },
+	   "err":{
+	      "message":{
+		 "status":400,
+		 "title":"Bad Request",
+		 "detail":"Invalid user ID format."
+	      },
+	      "name":"Error",
+	      "stack":"Error: Bad Request\n    at Object.module.exports [as throw] (/media/crypt2/projects/ride-share-market-api/node_modules/koa/lib/context.js:84:48)\n    at Object.<anonymous> (/media/crypt2/projects/ride-share-market-api/app/routes/routes-users.js:24:17)\n    at GeneratorFunctionPrototype.throw (native)\n    at Object.next (/media/crypt2/projects/ride-share-market-api/node_modules/koa/node_modules/co/index.js:65:26)\n    at /media/crypt2/projects/ride-share-market-api/node_modules/koa/node_modules/co/index.js:93:18\n    at _rejected (/media/crypt2/projects/ride-share-market-api/node_modules/q/q.js:797:24)\n    at /media/crypt2/projects/ride-share-market-api/node_modules/q/q.js:823:30\n    at Promise.when (/media/crypt2/projects/ride-share-market-api/node_modules/q/q.js:1035:31)\n    at Promise.promise.promiseDispatch (/media/crypt2/projects/ride-share-market-api/node_modules/q/q.js:741:41)\n    at /media/crypt2/projects/ride-share-market-api/node_modules/q/q.js:509:49"
+	   },
+	   "msg":"GET /users/123",
+	   "time":"2014-08-20T15:05:44.442Z",
+	   "v":0
+	}
+
+## Kibana Success Screenshot example:
+
+[Kibana Success Screenshot example](images/kibana_success_log_entry.png)
+
+## Kibana Error Screenshot example:
+
+[Kibana Error Screenshot example](images/kibana_error_log_entry.png)
+

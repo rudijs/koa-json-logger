@@ -15,7 +15,9 @@
     "koa",
     "koajs",
     "logger",
-    "json"
+    "json",
+    "logstash",
+    "elk"
   ],
   "author": {
     "name": "Rudi Starcevic",
