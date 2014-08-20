@@ -179,11 +179,11 @@ git clone the full repo: `git clone git@github.com:rudijs/koa-json-logger.git`
 ## Kibana Success Screenshot example:
 
 
-![Screenshot](images/kibana_success_log_entry.png)
+![Screenshot](examples/kibana_success_log_entry.png)
 
 
 ## Kibana Error Screenshot example:
 
 
-![Screenshot](images/kibana_error_log_entry.png)
+![Screenshot](examples/kibana_error_log_entry.png)
 
