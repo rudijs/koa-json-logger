@@ -1,7 +1,7 @@
 koa-json-logger
 ===============
 
-KoaJS HTTP Request/Response and uncaught downstream Error JSON format logger
+KoaJS HTTP Request/Response and Request/Response/Error JSON format logger.
 
 [![Build Status](https://travis-ci.org/rudijs/koa-json-logger.svg?branch=master)](https://travis-ci.org/rudijs/koa-json-logger)  
 [![Coverage Status](https://coveralls.io/repos/rudijs/koa-json-logger/badge.png?branch=master)](https://coveralls.io/r/rudijs/koa-json-logger?branch=master)  
