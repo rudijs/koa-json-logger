@@ -35,7 +35,7 @@ In the node env of development errors will also be output to the console.
 
 500 error responses are logged in full detail but the HTTP user response will always be only 'Internal Server Error'.
 
-<500 and >=501 error responses are logged and passed through as is to the user in the HTTP response.
+Less than 500 and greater than 500 error responses are logged and passed through as is to the user in the HTTP response.
 
 Higher level goals are:
 
@@ -70,8 +70,9 @@ Log files have daily rotation and keeps 3 back copies.
 
 Currently the only supported config options are:
 
--`name` which configures the log file name and name property of the log entry.
--`path` which configures the log directory (relative) to use.
+- `name` which configures the log file name and name property of the log entry.
+
+- `path` which configures the log directory (relative) to use.
 
       app.use(koaJsonLogger({
         name: 'myCoolApp',
