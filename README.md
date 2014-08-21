@@ -31,10 +31,16 @@ Error (>=400) log entries will contain Request details, Response status code, Re
 
 Success and Error logs will have their own file (two files).
 
+In the node env of development errors will also be output to the console.
+
+500 error responses are logged in full detail but the HTTP user response will always be only 'Internal Server Error'.
+
+<500 and >=501 error responses are logged and passed through as is to the user in the HTTP reponse.
+
 Higher level goals are:
 
 - Create uniform success and error log entries in JSON format for centralized logging
-- In particular the ELK stack (Logstash, Elasticsearch and Kibana)
+- In particular tested and used with the ELK stack (Logstash, Elasticsearch and Kibana)
 - A unique ID (RFC4122 uuid v4) is also created for each log entry.
 - This uuid can be used in other application logs, which end up in ELK, so you can correlate the request or error to other custom log entries.
 
@@ -77,6 +83,14 @@ You can throw errors this way but they will be silently *not* logged - so best *
     this.status = 401;
     this.body = 'Access Denied';
 
+The uid is set for each request and can be accessed/used with `this.uuid`
+
+For example using Bunyan elsewhere in your application for logging you could use the uid like so:
+
+`logger.info({uid: this.uuid}, 'Application log message here');`
+
+Then you can correlate http request/response/error log entries with you application log entries based on the uid.
+
 Please review the test suite for further details.
 
 ## Tests with code coverage report in `test/coverage`
@@ -102,77 +116,98 @@ git clone the full repo: `git clone git@github.com:rudijs/koa-json-logger.git`
 ## Sample Success Log Entry (pretty print)
 
 	{
-	   "name":"myapp",
+	   "name":"rsm-api",
 	   "hostname":"dev",
-	   "pid":23816,
+	   "pid":30213,
 	   "level":30,
+	   "uid":"37154307-aed2-4e10-b702-97ed9e7d4a3b",
 	   "req":{
-	      "uuid":"04c41cbc-022c-43e0-846b-81922e5e4aa2",
 	      "url":"/users/539d77e8cd4e834b710a103a",
 	      "headers":{
 		 "host":"127.0.0.1:3000",
 		 "connection":"keep-alive",
 		 "cache-control":"no-cache",
 		 "user-agent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.152 Safari/537.36",
+		 "content-type":"application/vnd.api+json",
 		 "accept":"*/*",
 		 "accept-encoding":"gzip,deflate,sdch",
 		 "accept-language":"en-US,en;q=0.8"
 	      },
 	      "method":"GET",
+	      "ip":"::ffff:127.0.0.1",
+	      "protocol":"http",
 	      "originalUrl":"/users/539d77e8cd4e834b710a103a",
-	      "query":{
-
-	      }
+	      "query":{}
 	   },
 	   "res":{
 	      "statusCode":200,
-	      "responseTime":4
+	      "responseTime":15,
+	      "headers":{
+		 "cache-control":"no-store, no-cache",
+		 "x-content-type-options":"nosniff",
+		 "x-download-options":"noopen",
+		 "x-xss-protection":"1; mode=block",
+		 "x-frame-options":"DENY",
+		 "vary":"Accept-Encoding",
+		 "content-type":"application/json; charset=utf-8",
+		 "x-response-time":"10ms",
+		 "content-length":"66"
+	      }
 	   },
-	   "msg":"GET /users/539d77e8cd4e834b710a103a",
-	   "time":"2014-08-20T14:59:47.257Z",
+	   "msg":"",
+	   "time":"2014-08-21T16:24:24.118Z",
 	   "v":0
 	}
 
 ## Sample Error Log Entry (pretty print)
 
 	{
-	   "name":"myapp",
+	   "name":"rsm-api",
 	   "hostname":"dev",
-	   "pid":23816,
+	   "pid":30213,
 	   "level":50,
+	   "uid":"ec874d07-dd94-4298-a4c3-8181a6803d4a",
 	   "req":{
-	      "uuid":"3abbb7d7-e9c3-48ab-8ba9-da3db000592f",
-	      "url":"/users/123",
+	      "url":"/users/539d77e8cd4e834b710a103a",
 	      "headers":{
 		 "host":"127.0.0.1:3000",
 		 "connection":"keep-alive",
 		 "cache-control":"no-cache",
 		 "user-agent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.152 Safari/537.36",
+		 "content-type":"application/vnd.api+json",
 		 "accept":"*/*",
 		 "accept-encoding":"gzip,deflate,sdch",
 		 "accept-language":"en-US,en;q=0.8"
 	      },
 	      "method":"GET",
-	      "originalUrl":"/users/123",
-	      "query":{
-
-	      }
+	      "ip":"::ffff:127.0.0.1",
+	      "protocol":"http",
+	      "originalUrl":"/users/539d77e8cd4e834b710a103a",
+	      "query":{}
 	   },
 	   "res":{
-	      "statusCode":400,
-	      "responseTime":8
+	      "statusCode":401,
+	      "responseTime":3,
+	      "headers":{
+		 "cache-control":"no-store, no-cache",
+		 "x-content-type-options":"nosniff",
+		 "x-download-options":"noopen",
+		 "x-xss-protection":"1; mode=block",
+		 "x-frame-options":"DENY",
+		 "vary":"Accept-Encoding"
+	      }
 	   },
 	   "err":{
 	      "message":{
-		 "status":400,
-		 "title":"Bad Request",
-		 "detail":"Invalid user ID format."
+		 "status":401,
+		 "title":"Unauthorized",
+		 "detail":"Please sign in to complete this request."
 	      },
 	      "name":"Error",
-	      "stack":"Error: Bad Request\n    at Object.module.exports [as throw] (/media/crypt2/projects/ride-share-market-api/node_modules/koa/lib/context.js:84:48)\n    at Object.<anonymous> (/media/crypt2/projects/ride-share-market-api/app/routes/routes-users.js:24:17)\n    at GeneratorFunctionPrototype.throw (native)\n    at Object.next (/media/crypt2/projects/ride-share-market-api/node_modules/koa/node_modules/co/index.js:65:26)\n    at /media/crypt2/projects/ride-share-market-api/node_modules/koa/node_modules/co/index.js:93:18\n    at _rejected (/media/crypt2/projects/ride-share-market-api/node_modules/q/q.js:797:24)\n    at /media/crypt2/projects/ride-share-market-api/node_modules/q/q.js:823:30\n    at Promise.when (/media/crypt2/projects/ride-share-market-api/node_modules/q/q.js:1035:31)\n    at Promise.promise.promiseDispatch (/media/crypt2/projects/ride-share-market-api/node_modules/q/q.js:741:41)\n    at /media/crypt2/projects/ride-share-market-api/node_modules/q/q.js:509:49"
+	      "stack":"Error: Unauthorized\n    at Object.module.exports [as throw] (/media/crypt2/projects/ride-share-market-api/node_modules/koa/lib/context.js:84:48)\n    at Object.authorization (/media/crypt2/projects/ride-share-market-api/app/middlewares/authorization.js:49:19)\n    at GeneratorFunctionPrototype.next (native)\n    at Object.<anonymous> (/media/crypt2/projects/ride-share-market-api/node_modules/koa-router/node_modules/koa-compose/index.js:29:12)\n    at GeneratorFunctionPrototype.next (native)\n    at next (/media/crypt2/projects/ride-share-market-api/node_modules/koa/node_modules/co/index.js:74:21)\n    at Object.<anonymous> (/media/crypt2/projects/ride-share-market-api/node_modules/koa/node_modules/co/index.js:45:5)\n    at next (/media/crypt2/projects/ride-share-market-api/node_modules/koa/node_modules/co/index.js:90:21)\n    at Object.<anonymous> (/media/crypt2/projects/ride-share-market-api/node_modules/koa/node_modules/co/index.js:45:5)\n    at next (/media/crypt2/projects/ride-share-market-api/node_modules/koa/node_modules/co/index.js:90:21)"
 	   },
-	   "msg":"GET /users/123",
-	   "time":"2014-08-20T15:05:44.442Z",
+	   "msg":"",
+	   "time":"2014-08-21T16:26:52.338Z",
 	   "v":0
 	}
 

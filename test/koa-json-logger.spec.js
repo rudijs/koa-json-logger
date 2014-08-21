@@ -2,12 +2,12 @@
 
 var should = require('chai').should(),
   request = require('supertest'),
+  sinon = require('sinon'),
   koa = require('koa'),
   fs = require('fs');
 
 var koaJsonLogger = require('../lib/koa-json-logger'),
   testLogFiles = [
-    'log/test.log',
     'log/myapp.log',
     'log/myapp_error.log'
   ],
@@ -67,11 +67,10 @@ describe('JSON Logger middleware', function () {
 
             // bunyan property logging
             logEntry.name.should.equal('myapp');
-            logEntry.msg.should.equal('GET /');
+            should.exist(logEntry.uid);
+            logEntry.uid.should.match(/^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i);
 
             // request logging
-            should.exist(logEntry.req.uuid);
-            logEntry.req.uuid.should.match(/^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i);
             logEntry.req.method.should.equal('GET');
             logEntry.req.url.should.equal('/');
             should.exist(logEntry.req.headers);
@@ -79,6 +78,7 @@ describe('JSON Logger middleware', function () {
             // response logging
             logEntry.res.statusCode.should.equal(200);
             should.exist(logEntry.res.responseTime);
+            logEntry.res.headers['x-powered-by'].should.equal('koa');
 
             done();
           });
@@ -132,11 +132,10 @@ describe('JSON Logger middleware', function () {
 
             // bunyan property logging
             logEntry.name.should.equal('myapp');
-            logEntry.msg.should.equal('GET /');
+            should.exist(logEntry.uid);
+            logEntry.uid.should.match(/^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i);
 
             // request logging
-            should.exist(logEntry.req.uuid);
-            logEntry.req.uuid.should.match(/^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i);
             logEntry.req.method.should.equal('GET');
             logEntry.req.url.should.equal('/');
             should.exist(logEntry.req.headers);
@@ -144,6 +143,7 @@ describe('JSON Logger middleware', function () {
             // response logging
             logEntry.res.statusCode.should.equal(500);
             should.exist(logEntry.res.responseTime);
+            logEntry.res.headers['x-powered-by'].should.equal('koa');
 
             // error logging
             logEntry.err.message.should.match(/Something\ blew\ up/);
@@ -193,11 +193,10 @@ describe('JSON Logger middleware', function () {
 
             // bunyan property logging
             logEntry.name.should.equal('myapp');
-            logEntry.msg.should.equal('GET /');
+            should.exist(logEntry.uid);
+            logEntry.uid.should.match(/^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i);
 
             // request logging
-            should.exist(logEntry.req.uuid);
-            logEntry.req.uuid.should.match(/^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i);
             logEntry.req.method.should.equal('GET');
             logEntry.req.url.should.equal('/');
             should.exist(logEntry.req.headers);
@@ -205,6 +204,7 @@ describe('JSON Logger middleware', function () {
             // response logging
             logEntry.res.statusCode.should.equal(400);
             should.exist(logEntry.res.responseTime);
+            logEntry.res.headers['x-powered-by'].should.equal('koa');
 
             // error logging
             logEntry.err.message.should.equal('Bad URL parameter format');
@@ -260,11 +260,10 @@ describe('JSON Logger middleware', function () {
 
             // bunyan property logging
             logEntry.name.should.equal('myapp');
-            logEntry.msg.should.equal('GET /');
+            should.exist(logEntry.uid);
+            logEntry.uid.should.match(/^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i);
 
             // request logging
-            should.exist(logEntry.req.uuid);
-            logEntry.req.uuid.should.match(/^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i);
             logEntry.req.method.should.equal('GET');
             logEntry.req.url.should.equal('/');
             should.exist(logEntry.req.headers);
@@ -272,6 +271,8 @@ describe('JSON Logger middleware', function () {
             // response logging
             logEntry.res.statusCode.should.equal(500);
             should.exist(logEntry.res.responseTime);
+            logEntry.res.headers['x-powered-by'].should.equal('koa');
+            logEntry.res.headers['content-type'].should.equal('application/vnd.api+json');
 
             // error logging
             logEntry.err.message.should.match(/Something\ blew\ up/);
@@ -285,33 +286,40 @@ describe('JSON Logger middleware', function () {
 
     });
 
-  });
+    it('should emit conosle errors in development mode only', function (done) {
 
-//    it('should log errors to console in development mode', function (done) {
-//
-//      process.env.NODE_ENV = 'development';
-//
-//      // default test route throw error
-//      app.use(function *route1(next) {
-//        yield next;
-//        throw new Error('Oops! Something blew up.');
-//      });
-//
-//      request(app.listen())
-//        .get('/')
-//        .expect(500)
-//        .end(function (err, res) {
-//          if (err) {
-//            should.not.exist(err);
-//            return done(err);
-//          }
-//          res.text.should.equal('Internal Server Error');
-//          done();
-//
-//        });
-//
-//    });
-//
-//  });
+      process.env.NODE_ENV = 'development';
+
+      app.emit = sinon.spy();
+
+      app.use(koaJsonLogger());
+
+      // 1st default test route that will catch uncaught downstream errors
+      app.use(function *route1(next) {
+
+        // throw a custom application error
+        this.throw(400, 'Bad URL parameter format');
+        yield next;
+      });
+
+      request(app.listen())
+        .get('/')
+        .expect(400)
+        .end(function (err) {
+          if (err) {
+            should.not.exist(err);
+            return done(err);
+          }
+
+          // test for console error output
+          sinon.assert.calledOnce(app.emit);
+          sinon.assert.calledWith(app.emit, 'error');
+
+          done();
+        });
+
+    });
+
+  });
 
 });
