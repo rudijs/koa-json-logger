@@ -25,9 +25,9 @@ Code review, suggestions and pull requests very much welcome - thanks!
 
 The basic goal of this module is to create log entries in JSON format for each HTTP request.
 
-Success (<400) log entries will contain Request details, Response status code and Response time.
+Success (<400) log entries will contain Request adn Response details.
 
-Error (>=400) log entries will contain Request details, Response status code, Response time and Error details.
+Error (>=400) log entries will contain Request, Response and Error details.
 
 Success and Error logs will have their own file (two files).
 
@@ -35,7 +35,7 @@ In the node env of development errors will also be output to the console.
 
 500 error responses are logged in full detail but the HTTP user response will always be only 'Internal Server Error'.
 
-<500 and >=501 error responses are logged and passed through as is to the user in the HTTP reponse.
+<500 and >=501 error responses are logged and passed through as is to the user in the HTTP response.
 
 Higher level goals are:
 
