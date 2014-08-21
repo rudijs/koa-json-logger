@@ -74,6 +74,8 @@ Currently the only supported config options are:
 
 - `path` which configures the log directory (relative) to use.
 
+Example:
+
       app.use(koaJsonLogger({
         name: 'myCoolApp',
         path: 'logs'
