@@ -68,10 +68,14 @@ Default use will create two log files:
 
 Log files have daily rotation and keeps 3 back copies.
 
-Currently the only supported config options are `name` which configures the log file name and name property of the log entry.
+Currently the only supported config options are:
+
+-`name` which configures the log file name and name property of the log entry.
+-`path` which configures the log directory (relative) to use.
 
       app.use(koaJsonLogger({
-        name: 'myCoolApp'
+        name: 'myCoolApp',
+        path: 'logs'
       }));
 
 When you throw an application error it's best to always use `this.throw`
