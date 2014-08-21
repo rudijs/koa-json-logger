@@ -1,7 +1,7 @@
 koa-json-logger
 ===============
 
-KoaJS HTTP Request/Response and uncaught downstream Error JSON format logger
+KoaJS HTTP Request/Response and Request/Response/Error JSON format logger.
 
 [![Build Status](https://travis-ci.org/rudijs/koa-json-logger.svg?branch=master)](https://travis-ci.org/rudijs/koa-json-logger)  
 [![Coverage Status](https://coveralls.io/repos/rudijs/koa-json-logger/badge.png?branch=master)](https://coveralls.io/r/rudijs/koa-json-logger?branch=master)  
@@ -21,77 +21,30 @@ Credits and inspired by:
 
 Code review, suggestions and pull requests very much welcome - thanks!
 
-## Sample 200 Log Entry (pretty print)
+## Overview
 
-    {  
-       "name":"myapp",
-       "hostname":"dev",
-       "pid":16345,
-       "level":30,
-       "req":{  
-          "url":"/users/539d77e8cd4e834b710a103a",
-          "headers":{  
-             "user-agent":"curl/7.22.0 (x86_64-pc-linux-gnu) libcurl/7.22.0 OpenSSL/1.0.1 zlib/1.2.3.4 libidn/1.23 librtmp/2.3",
-             "host":"127.0.0.1:3000",
-             "accept":"*/*",
-          },
-          "method":"GET",
-          "originalUrl":"/users/539d77e8cd4e834b710a103a",
-          "query":{  
-    
-          }
-       },
-       "res":{  
-          "statusCode":200,
-          "responseTime":14
-       },
-       "msg":"GET /users/539d77e8cd4e834b710a103a",
-       "time":"2014-08-06T09:02:02.117Z",
-       "v":0
-    }
+The basic goal of this module is to create log entries in JSON format for each HTTP request.
 
-   
-## Sample 500 Log Entry, two log entries for errors. The error and the request (pretty print)
+Success (<400) log entries will contain Request adn Response details.
 
-    {  
-       "name":"unitTest",
-       "hostname":"dev",
-       "pid":21494,
-       "level":50,
-       "err":"Error: Oops! Something blew up.\n    at Object.route1 (/media/crypt2/projects/koa-json-logger/test/koa-json-logger.spec.js:208:15)\n    at GeneratorFunctionPrototype.next (native)\n    at Object.next (/media/crypt2/projects/koa-json-logger/node_modules/koa/node_modules/co/index.js:74:21)\n    at Object.<anonymous> (/media/crypt2/projects/koa-json-logger/node_modules/koa/node_modules/co/index.js:93:18)\n    at Immediate._onImmediate (/media/crypt2/projects/koa-json-logger/node_modules/koa/node_modules/co/index.js:52:14)\n    at processImmediate [as _immediateCallback] (timers.js:374:17)",
-       "msg":"GET /",
-       "time":"2014-08-04T14:33:01.581Z",
-       "v":0
-    }
+Error (>=400) log entries will contain Request, Response and Error details.
 
-    {  
-       "name":"unitTest",
-       "hostname":"dev",
-       "pid":21494,
-       "level":30,
-       "req":{  
-          "url":"/",
-          "headers":{  
-             "host":"127.0.0.1:50762",
-             "accept-encoding":"gzip, deflate",
-             "cookie":"",
-             "user-agent":"node-superagent/0.18.0",
-             "connection":"close"
-          },
-          "method":"GET",
-          "originalUrl":"/",
-          "query":{  
-    
-          }
-       },
-       "res":{  
-          "statusCode":500,
-          "responseTime":2
-       },
-       "msg":"GET /",
-       "time":"2014-08-04T14:33:01.583Z",
-       "v":0
-    }
+Success and Error logs will have their own file (two files).
+
+In the node env of development errors will also be output to the console.
+
+500 error responses are logged in full detail but the HTTP user response will always be only 'Internal Server Error'.
+
+Less than 500 and greater than 500 error responses are logged and passed through as is to the user in the HTTP response.
+
+Higher level goals are:
+
+- Create uniform success and error log entries in JSON format for centralized logging
+- In particular tested and used with the ELK stack (Logstash, Elasticsearch and Kibana)
+- A unique ID (RFC4122 uuid v4) is also created for each log entry.
+- This uuid can be used in other application logs, which end up in ELK, so you can correlate the request or error to other custom log entries.
+
+Below will be some sample log entries in pretty print and also some screen shots of how they look in Kibana.
 
 ## Install
 
@@ -103,31 +56,47 @@ Code review, suggestions and pull requests very much welcome - thanks!
 
 `app.use(koaJsonLogger());`
 
-I suggest it's best to use this middleware very first in the stack so any and all downstream uncaught errors are logged.
+I suggest it's best to use this middleware high in the middleware stack so any and all downstream uncaught errors are logged.
 
-Default will log to a relative `log/` directory so you'll need to create this folder.
+Logs will go into a `log/` directory relative to file that instruments the Koa app, so you'll need to create this folder.
  
 Default use will create two log files:
 
-`log/myapp.log` will contain req/res log entries plus error log entries
+`log/myapp.log` will contain req/res log entries.
 
-`log/myapp-error.log` will contain error log entries only.
-
-Note: this current behavior means error logs will be duplicate - one in each file.
+`log/myapp_error.log` will contain error log entries.
 
 Log files have daily rotation and keeps 3 back copies.
 
-If you prefer req/res and error log entries to be in a single file you can pass in some bunyan streams config like this:
+Currently the only supported config options are:
+
+- `name` which configures the log file name and name property of the log entry.
+
+- `path` which configures the log directory (relative) to use.
+
+Example:
 
       app.use(koaJsonLogger({
         name: 'myCoolApp',
-        streams: [{
-            level: 'info',
-            path: 'log/app.log'
-          }]
+        path: 'logs'
       }));
 
-Currently the only supported config options are `name`, `streams` and `level`
+When you throw an application error it's best to always use `this.throw`
+
+Example: `this.throw(403, 'Access Denied');`
+
+You can throw errors this way but they will be silently *not* logged - so best *not* to do it this way:
+
+    this.status = 401;
+    this.body = 'Access Denied';
+
+The uid is set for each request and can be accessed/used with `this.uuid`
+
+For example using Bunyan elsewhere in your application for logging you could use the uid like so:
+
+`logger.info({uid: this.uuid}, 'Application log message here');`
+
+Then you can correlate http request/response/error log entries with you application log entries based on the uid.
 
 Please review the test suite for further details.
 
@@ -149,3 +118,114 @@ git clone the full repo: `git clone git@github.com:rudijs/koa-json-logger.git`
 `./node_modules/jshint/bin/jshint lib/**/*.js`
 
 `./node_modules/jshint/bin/jshint test/*.js`
+
+
+## Sample Success Log Entry (pretty print)
+
+	{
+	   "name":"rsm-api",
+	   "hostname":"dev",
+	   "pid":30213,
+	   "level":30,
+	   "uid":"37154307-aed2-4e10-b702-97ed9e7d4a3b",
+	   "req":{
+	      "url":"/users/539d77e8cd4e834b710a103a",
+	      "headers":{
+		 "host":"127.0.0.1:3000",
+		 "connection":"keep-alive",
+		 "cache-control":"no-cache",
+		 "user-agent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.152 Safari/537.36",
+		 "content-type":"application/vnd.api+json",
+		 "accept":"*/*",
+		 "accept-encoding":"gzip,deflate,sdch",
+		 "accept-language":"en-US,en;q=0.8"
+	      },
+	      "method":"GET",
+	      "ip":"::ffff:127.0.0.1",
+	      "protocol":"http",
+	      "originalUrl":"/users/539d77e8cd4e834b710a103a",
+	      "query":{}
+	   },
+	   "res":{
+	      "statusCode":200,
+	      "responseTime":15,
+	      "headers":{
+		 "cache-control":"no-store, no-cache",
+		 "x-content-type-options":"nosniff",
+		 "x-download-options":"noopen",
+		 "x-xss-protection":"1; mode=block",
+		 "x-frame-options":"DENY",
+		 "vary":"Accept-Encoding",
+		 "content-type":"application/json; charset=utf-8",
+		 "x-response-time":"10ms",
+		 "content-length":"66"
+	      }
+	   },
+	   "msg":"",
+	   "time":"2014-08-21T16:24:24.118Z",
+	   "v":0
+	}
+
+## Sample Error Log Entry (pretty print)
+
+	{
+	   "name":"rsm-api",
+	   "hostname":"dev",
+	   "pid":30213,
+	   "level":50,
+	   "uid":"ec874d07-dd94-4298-a4c3-8181a6803d4a",
+	   "req":{
+	      "url":"/users/539d77e8cd4e834b710a103a",
+	      "headers":{
+		 "host":"127.0.0.1:3000",
+		 "connection":"keep-alive",
+		 "cache-control":"no-cache",
+		 "user-agent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.152 Safari/537.36",
+		 "content-type":"application/vnd.api+json",
+		 "accept":"*/*",
+		 "accept-encoding":"gzip,deflate,sdch",
+		 "accept-language":"en-US,en;q=0.8"
+	      },
+	      "method":"GET",
+	      "ip":"::ffff:127.0.0.1",
+	      "protocol":"http",
+	      "originalUrl":"/users/539d77e8cd4e834b710a103a",
+	      "query":{}
+	   },
+	   "res":{
+	      "statusCode":401,
+	      "responseTime":3,
+	      "headers":{
+		 "cache-control":"no-store, no-cache",
+		 "x-content-type-options":"nosniff",
+		 "x-download-options":"noopen",
+		 "x-xss-protection":"1; mode=block",
+		 "x-frame-options":"DENY",
+		 "vary":"Accept-Encoding"
+	      }
+	   },
+	   "err":{
+	      "message":{
+		 "status":401,
+		 "title":"Unauthorized",
+		 "detail":"Please sign in to complete this request."
+	      },
+	      "name":"Error",
+	      "stack":"Error: Unauthorized\n    at Object.module.exports [as throw] (/media/crypt2/projects/ride-share-market-api/node_modules/koa/lib/context.js:84:48)\n    at Object.authorization (/media/crypt2/projects/ride-share-market-api/app/middlewares/authorization.js:49:19)\n    at GeneratorFunctionPrototype.next (native)\n    at Object.<anonymous> (/media/crypt2/projects/ride-share-market-api/node_modules/koa-router/node_modules/koa-compose/index.js:29:12)\n    at GeneratorFunctionPrototype.next (native)\n    at next (/media/crypt2/projects/ride-share-market-api/node_modules/koa/node_modules/co/index.js:74:21)\n    at Object.<anonymous> (/media/crypt2/projects/ride-share-market-api/node_modules/koa/node_modules/co/index.js:45:5)\n    at next (/media/crypt2/projects/ride-share-market-api/node_modules/koa/node_modules/co/index.js:90:21)\n    at Object.<anonymous> (/media/crypt2/projects/ride-share-market-api/node_modules/koa/node_modules/co/index.js:45:5)\n    at next (/media/crypt2/projects/ride-share-market-api/node_modules/koa/node_modules/co/index.js:90:21)"
+	   },
+	   "msg":"",
+	   "time":"2014-08-21T16:26:52.338Z",
+	   "v":0
+	}
+
+## Kibana Success Screenshot example:
+
+
+![Screenshot](examples/kibana_success_log_entry.png)
+
+
+## Kibana Error Screenshot example:
+
+
+![Screenshot](examples/kibana_error_log_entry.png)
+

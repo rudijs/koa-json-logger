@@ -1,7 +1,7 @@
 {
   "name": "koa-json-logger",
-  "version": "0.0.7",
-  "description": "KoaJS HTTP Request/Response and uncaught downstream Error JSON format logger",
+  "version": "0.0.8",
+  "description": "KoaJS HTTP Request/Response and Request/Response/Error JSON format logger",
   "repository": {
     "type": "git",
     "url": "https://github.com/rudijs/koa-json-logger.git"
@@ -15,7 +15,9 @@
     "koa",
     "koajs",
     "logger",
-    "json"
+    "json",
+    "logstash",
+    "elk"
   ],
   "author": {
     "name": "Rudi Starcevic",
@@ -29,12 +31,14 @@
     "chai": "^1.9.1",
     "coveralls": "^2.11.1",
     "istanbul": "git://github.com/gotwarlost/istanbul.git#harmony",
-    "jshint": "^2.5.2",
-    "koa": "^0.8.2",
-    "mocha": "^1.21.3",
+    "jshint": "^2.5.4",
+    "koa": "^0.10.0",
+    "mocha": "^1.21.4",
+    "sinon": "^1.10.3",
     "supertest": "^0.13.0"
   },
   "dependencies": {
-    "bunyan": "^0.23.1"
+    "bunyan": "^1.0.0",
+    "uuid": "^1.4.1"
   }
 }
