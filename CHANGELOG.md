@@ -1,6 +1,21 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.0.9 - 2014-08-22
+
+### Added
+- Ensure default 500 status code for errors
+- Readme updates
+
+### Deprecated
+- Nothing.
+
+### Removed
+- Nothing.
+
+### Fixed
+- Nothing.
+
 ## 0.0.8 - 2014-08-22
 
 ### Added
