@@ -81,11 +81,13 @@ Example:
         path: 'logs'
       }));
 
-When you throw an application error it's best to always use `this.throw`
+When you throw an application error it's best to always use [throw](https://github.com/koajs/koa/blob/master/docs/api/context.md#ctxthrowmsg-status-properties)
 
 Example: `this.throw(403, 'Access Denied');`
 
-You can throw errors this way but they will be silently *not* logged - so best *not* to do it this way:
+See the docs for more details [throw](https://github.com/koajs/koa/blob/master/docs/api/context.md#ctxthrowmsg-status-properties)
+
+You can return errors this way (no throw) but they will be silently *not* logged - so best *not* to do it this way:
 
     this.status = 401;
     this.body = 'Access Denied';
