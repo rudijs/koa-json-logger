@@ -1,6 +1,20 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.0.10 - 2014-08-22
+
+### Added
+- Readme updates
+
+### Deprecated
+- Nothing.
+
+### Removed
+- Nothing.
+
+### Fixed
+- Nothing.
+
 ## 0.0.9 - 2014-08-22
 
 ### Added
@@ -26,6 +40,7 @@ All notable changes to this project will be documented in this file.
 - Configurable log directory option
 - Dependency updates
 - JSON API application/vnd.api+json format response support added
+- Readme updates
 
 ### Deprecated
 - Nothing.
