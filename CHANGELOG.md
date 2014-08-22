@@ -1,6 +1,21 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.0.13 - 2014-08-22
+
+### Added
+- Update to istanbul-harmony npm package
+- Readme updates
+
+### Deprecated
+- Nothing.
+
+### Removed
+- Nothing.
+
+### Fixed
+- Nothing.
+
 ## 0.0.12 - 2014-08-22
 
 ### Added

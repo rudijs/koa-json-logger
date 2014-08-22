@@ -1,6 +1,6 @@
 {
   "name": "koa-json-logger",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "KoaJS HTTP Request/Response and Request/Response/Error JSON format logger",
   "repository": {
     "type": "git",
@@ -8,8 +8,8 @@
   },
   "main": "./lib/koa-json-logger.js",
   "scripts": {
-    "test": "node --harmony node_modules/istanbul/lib/cli.js cover node_modules/mocha/bin/_mocha --root lib/ --dir test/coverage  -- -u exports -R spec",
-    "coveralls": "node --harmony node_modules/istanbul/lib/cli.js cover node_modules/mocha/bin/_mocha --root lib/ --dir test/coverage  -- -u exports -R spec && cat ./test/coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
+    "test": "node --harmony node_modules/istanbul-harmony/lib/cli.js cover node_modules/mocha/bin/_mocha --root lib/ --dir test/coverage  -- -u exports -R spec",
+    "coveralls": "node --harmony node_modules/istanbul-harmony/lib/cli.js cover node_modules/mocha/bin/_mocha --root lib/ --dir test/coverage  -- -u exports -R spec && cat ./test/coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
   },
   "keywords": [
     "koa",
@@ -30,7 +30,7 @@
   "devDependencies": {
     "chai": "^1.9.1",
     "coveralls": "^2.11.1",
-    "istanbul": "git://github.com/gotwarlost/istanbul.git#harmony",
+    "istanbul-harmony": "^0.3.0",
     "jshint": "^2.5.4",
     "koa": "^0.10.0",
     "mocha": "^1.21.4",
