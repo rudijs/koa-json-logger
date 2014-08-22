@@ -95,8 +95,6 @@ describe('JSON Logger middleware', function () {
 
       app.use(koaJsonLogger());
 
-      //    process.env.NODE_ENV = 'development';
-
       // 1st default test route that will catch uncaught downstream errors
       app.use(function *route1(next) {
         yield next;
@@ -210,6 +208,64 @@ describe('JSON Logger middleware', function () {
             logEntry.err.message.should.equal('Bad URL parameter format');
             logEntry.err.name.should.equal('Error');
             logEntry.err.stack.should.match(/Bad\ URL\ parameter\ format/);
+
+            done();
+          });
+
+        });
+
+    });
+
+    it('should default to 500 error status code', function (done) {
+
+      app.use(koaJsonLogger());
+
+      app.use(function *route1(next) {
+        yield next;
+        throw new Error('Oops! Something blew up.');
+      });
+
+      request(app.listen())
+        .get('/')
+        .expect(500)
+        .end(function (err, res) {
+          if (err) {
+            should.not.exist(err);
+            return done(err);
+          }
+
+          // should not leak out internal server error messages on 500
+          // standard error response for the user
+          res.text.should.equal('Internal Server Error');
+
+          // read in log file entry
+          fs.readFile('log/myapp_error.log', function (err, data) {
+            if (err) {
+              throw err;
+            }
+
+            // test JSON parsed log entry
+            var logEntry = JSON.parse(data.toString());
+
+            // bunyan property logging
+            logEntry.name.should.equal('myapp');
+            should.exist(logEntry.uid);
+            logEntry.uid.should.match(/^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i);
+
+            // request logging
+            logEntry.req.method.should.equal('GET');
+            logEntry.req.url.should.equal('/');
+            should.exist(logEntry.req.headers);
+
+            // response logging
+            logEntry.res.statusCode.should.equal(500);
+            should.exist(logEntry.res.responseTime);
+            logEntry.res.headers['x-powered-by'].should.equal('koa');
+
+            // error logging
+            logEntry.err.message.should.match(/Something\ blew\ up/);
+            logEntry.err.name.should.equal('Error');
+            logEntry.err.stack.should.match(/Something\ blew\ up/);
 
             done();
           });
