@@ -1,7 +1,7 @@
 koa-json-logger
 ===============
 
-KoaJS HTTP Request/Response and Request/Response/Error JSON format logger.
+KoaJS HTTP Request/Response/Error JSON format logger.
 
 [![Build Status](https://travis-ci.org/rudijs/koa-json-logger.svg?branch=master)](https://travis-ci.org/rudijs/koa-json-logger)  
 [![Coverage Status](https://coveralls.io/repos/rudijs/koa-json-logger/badge.png?branch=master)](https://coveralls.io/r/rudijs/koa-json-logger?branch=master)  
@@ -56,7 +56,7 @@ Below will be some sample log entries in pretty print and also some screen shots
 
 `app.use(koaJsonLogger());`
 
-I suggest it's best to use this middleware high in the middleware stack so any and all downstream uncaught errors are logged.
+I suggest it's best to use this middleware high in the middleware stack so any and all downstream errors are logged.
 
 Logs will go into a `log/` directory relative to file that instruments the Koa app, so you'll need to create this folder.
  
