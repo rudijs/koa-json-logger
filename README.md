@@ -66,7 +66,7 @@ Default use will create two log files:
 
 `log/myapp_error.log` will contain error log entries.
 
-Log files have daily rotation and keeps 3 back copies.
+Log files are not auto rotated, recommend using system file rotation facility such as `logrotate` on Linux or `logadm` on SmartOS/Illumos.
 
 Currently the only supported config options are:
 

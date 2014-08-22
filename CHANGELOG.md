@@ -1,6 +1,20 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.0.12 - 2014-08-22
+
+### Added
+- Readme updates
+
+### Deprecated
+- Nothing.
+
+### Removed
+- Auto log rotation. Recommended to use system file rotation facility such as logrotate on Linux or logadm on SmartOS/Illumos
+
+### Fixed
+- Nothing.
+
 ## 0.0.11 - 2014-08-22
 
 ### Added
