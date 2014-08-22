@@ -87,9 +87,11 @@ Example:
 
     `this.throw(403, 'Access Denied');`
 
-See the docs for more details [throw](https://github.com/koajs/koa/blob/master/docs/api/context.md#ctxthrowmsg-status-properties)
+See the docs for [throw](https://github.com/koajs/koa/blob/master/docs/api/context.md#ctxthrowmsg-status-properties) details.
 
-You can return errors this way (no throw) but they will be silently *not* logged - so best *not* to do it this way:
+You can return errors this way (no throw) but without throwing this will end up in the standard log file - *not* the error log file.
+
+So best *not* to do it this way (the error message in the body will *not* be logged):
 
     // Not a good way to an return error
     this.status = 401;
