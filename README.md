@@ -25,7 +25,7 @@ Code review, suggestions and pull requests very much welcome - thanks!
 
 The basic goal of this module is to create log entries in JSON format for each HTTP request.
 
-Success (<400) log entries will contain Request adn Response details.
+Success (<400) log entries will contain Request and Response details.
 
 Error (>=400) log entries will contain Request, Response and Error details.
 
@@ -42,7 +42,7 @@ Higher level goals are:
 - Create uniform success and error log entries in JSON format for centralized logging
 - In particular tested and used with the ELK stack (Logstash, Elasticsearch and Kibana)
 - A unique ID (RFC4122 uuid v4) is also created for each log entry.
-- This uuid can be used in other application logs, which end up in ELK, so you can correlate the request or error to other custom log entries.
+- This uid can be used in other application logs, which end up in ELK, so you can correlate the request or error with other application log entries.
 
 Below will be some sample log entries in pretty print and also some screen shots of how they look in Kibana.
 
@@ -83,12 +83,15 @@ Example:
 
 When you throw an application error it's best to always use [throw](https://github.com/koajs/koa/blob/master/docs/api/context.md#ctxthrowmsg-status-properties)
 
-Example: `this.throw(403, 'Access Denied');`
+Example:
+
+    `this.throw(403, 'Access Denied');`
 
 See the docs for more details [throw](https://github.com/koajs/koa/blob/master/docs/api/context.md#ctxthrowmsg-status-properties)
 
 You can return errors this way (no throw) but they will be silently *not* logged - so best *not* to do it this way:
 
+    // Not a good way to an return error
     this.status = 401;
     this.body = 'Access Denied';
 
@@ -223,11 +226,11 @@ git clone the full repo: `git clone git@github.com:rudijs/koa-json-logger.git`
 ## Kibana Success Screenshot example:
 
 
-![Screenshot](examples/kibana_success_log_entry.png)
+![Kibana Success Screenshot](examples/kibana_success_log_entry.png)
 
 
 ## Kibana Error Screenshot example:
 
 
-![Screenshot](examples/kibana_error_log_entry.png)
+![Kibana Error Screenshot](examples/kibana_error_log_entry.png)
 
