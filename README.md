@@ -113,7 +113,7 @@ You can then throw errors like this for example:
       }
     }
 
-The uid set for each request and can be accessed/used with `this.uuid`
+The unique ID (uid) set for each request and can be accessed/used with `this.uuid`
 
 For example using Bunyan elsewhere in your application for logging you could use the uid like so:
 
