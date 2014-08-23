@@ -31,7 +31,7 @@ Error (>=400) log entries will contain Request, Response and Error details.
 
 Success and Error logs will have their own file (two files).
 
-In the node env of development errors will also be output to the console.
+In NODE_ENV development errors will also be output to the console.
 
 500 error responses are logged in full detail but the HTTP user response will always be only 'Internal Server Error'.
 
@@ -43,6 +43,7 @@ Higher level goals are:
 - In particular tested and used with the ELK stack (Logstash, Elasticsearch and Kibana)
 - A unique ID (RFC4122 uuid v4) is also created for each log entry.
 - This uid can be used in other application logs, which end up in ELK, so you can correlate the request or error with other application log entries.
+- Support [JSON API](http://jsonapi.org/) response type
 
 Below will be some sample log entries in pretty print and also some screen shots of how they look in Kibana.
 
@@ -62,23 +63,26 @@ Logs will go into a `log/` directory relative to file that instruments the Koa a
  
 Default use will create two log files:
 
-`log/myapp.log` will contain req/res log entries.
+`log/app.log` will contain req/res log entries.
 
-`log/myapp_error.log` will contain error log entries.
+`log/app_error.log` will contain error log entries.
 
 Log files are not auto rotated, recommend using system file rotation facility such as `logrotate` on Linux or `logadm` on SmartOS/Illumos.
 
-Currently the only supported config options are:
+Current config options are:
 
-- `name` which configures the log file name and name property of the log entry.
+- `name` (String default: 'app') configures the log file name and name property of the log entry.
 
-- `path` which configures the log directory (relative) to use.
+- `path` (String default: 'log') configures the log directory (relative) to use.
+
+- `jsonapi` (Boolean default: false) will set the response Content-type to application/vnd.api+json and ensure 500 responses are in JSON API format
 
 Example:
 
       app.use(koaJsonLogger({
         name: 'myCoolApp',
-        path: 'logs'
+        path: 'logs',
+        jsonapi: true
       }));
 
 When you throw an application error it's best to always use [throw](https://github.com/koajs/koa/blob/master/docs/api/context.md#ctxthrowmsg-status-properties)
@@ -97,7 +101,19 @@ So best *not* to do it this way (the error message in the body will *not* be log
     this.status = 401;
     this.body = 'Access Denied';
 
-The uid is set for each request and can be accessed/used with `this.uuid`
+If using [JSON API](http://jsonapi.org/) set `jsonapi: true` - response Content-type header will be set to application/vnd.api+json
+
+You can then throw errors like this for example:
+
+    this.throw(401, {
+      message: {
+        status: 401,
+        title: 'Unauthorized',
+        detail: 'No Authorization header found'
+      }
+    }
+
+The unique ID (uid) set for each request and can be accessed/used with `this.uuid`
 
 For example using Bunyan elsewhere in your application for logging you could use the uid like so:
 
@@ -164,7 +180,6 @@ git clone the full repo: `git clone git@github.com:rudijs/koa-json-logger.git`
 		 "x-frame-options":"DENY",
 		 "vary":"Accept-Encoding",
 		 "content-type":"application/json; charset=utf-8",
-		 "x-response-time":"10ms",
 		 "content-length":"66"
 	      }
 	   },

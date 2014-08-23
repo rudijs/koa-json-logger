@@ -1,6 +1,21 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.0.14 - 2014-08-23
+
+### Added
+- Readme updates
+- Better support for JSON API format responses
+
+### Deprecated
+- Nothing.
+
+### Removed
+- Nothing.
+
+### Fixed
+- Nothing.
+
 ## 0.0.13 - 2014-08-22
 
 ### Added

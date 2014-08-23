@@ -1,7 +1,7 @@
 {
   "name": "koa-json-logger",
-  "version": "0.0.13",
-  "description": "KoaJS HTTP Request/Response and Request/Response/Error JSON format logger",
+  "version": "0.0.14",
+  "description": "KoaJS HTTP Request/Response/Error JSON format logger",
   "repository": {
     "type": "git",
     "url": "https://github.com/rudijs/koa-json-logger.git"
@@ -39,6 +39,7 @@
   },
   "dependencies": {
     "bunyan": "^1.0.0",
+    "lodash": "^2.4.1",
     "uuid": "^1.4.1"
   }
 }

@@ -8,8 +8,8 @@ var should = require('chai').should(),
 
 var koaJsonLogger = require('../lib/koa-json-logger'),
   testLogFiles = [
-    'log/myapp.log',
-    'log/myapp_error.log'
+    'log/app.log',
+    'log/app_error.log'
   ],
   app;
 
@@ -57,7 +57,7 @@ describe('JSON Logger middleware', function () {
           res.text.should.equal('Test Response is OK.');
 
           // read in log file entry
-          fs.readFile('log/myapp.log', function (err, data) {
+          fs.readFile('log/app.log', function (err, data) {
             if (err) {
               throw err;
             }
@@ -66,7 +66,7 @@ describe('JSON Logger middleware', function () {
             var logEntry = JSON.parse(data.toString());
 
             // bunyan property logging
-            logEntry.name.should.equal('myapp');
+            logEntry.name.should.equal('app');
             should.exist(logEntry.uid);
             logEntry.uid.should.match(/^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i);
 
@@ -120,7 +120,7 @@ describe('JSON Logger middleware', function () {
           res.text.should.equal('Internal Server Error');
 
           // read in log file entry
-          fs.readFile('log/myapp_error.log', function (err, data) {
+          fs.readFile('log/app_error.log', function (err, data) {
             if (err) {
               throw err;
             }
@@ -129,7 +129,7 @@ describe('JSON Logger middleware', function () {
             var logEntry = JSON.parse(data.toString());
 
             // bunyan property logging
-            logEntry.name.should.equal('myapp');
+            logEntry.name.should.equal('app');
             should.exist(logEntry.uid);
             logEntry.uid.should.match(/^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i);
 
@@ -181,7 +181,7 @@ describe('JSON Logger middleware', function () {
           res.text.should.equal('Bad URL parameter format');
 
           // read in log file entry
-          fs.readFile('log/myapp_error.log', function (err, data) {
+          fs.readFile('log/app_error.log', function (err, data) {
             if (err) {
               throw err;
             }
@@ -190,7 +190,7 @@ describe('JSON Logger middleware', function () {
             var logEntry = JSON.parse(data.toString());
 
             // bunyan property logging
-            logEntry.name.should.equal('myapp');
+            logEntry.name.should.equal('app');
             should.exist(logEntry.uid);
             logEntry.uid.should.match(/^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i);
 
@@ -239,7 +239,7 @@ describe('JSON Logger middleware', function () {
           res.text.should.equal('Internal Server Error');
 
           // read in log file entry
-          fs.readFile('log/myapp_error.log', function (err, data) {
+          fs.readFile('log/app_error.log', function (err, data) {
             if (err) {
               throw err;
             }
@@ -248,7 +248,7 @@ describe('JSON Logger middleware', function () {
             var logEntry = JSON.parse(data.toString());
 
             // bunyan property logging
-            logEntry.name.should.equal('myapp');
+            logEntry.name.should.equal('app');
             should.exist(logEntry.uid);
             logEntry.uid.should.match(/^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i);
 
@@ -274,15 +274,12 @@ describe('JSON Logger middleware', function () {
 
     });
 
-    it('should respond with JSON 500 errors if response media type is JSON API', function (done) {
-
-      app.use(koaJsonLogger());
+    it('should respond with JSON/API 500 errors if response media type is JSON/API', function (done) {
 
       // Set the API response to JSON API format
-      app.use(function *route1(next) {
-        this.type = 'application/vnd.api+json';
-        yield next;
-      });
+      app.use(koaJsonLogger({
+        jsonapi: true
+      }));
 
       // 1st default test route that will catch uncaught downstream errors
       app.use(function *route1(next) {
@@ -306,7 +303,7 @@ describe('JSON Logger middleware', function () {
           res.text.should.equal('{"status":500,"title":"Internal Server Error"}');
 
           // read in log file entry
-          fs.readFile('log/myapp_error.log', function (err, data) {
+          fs.readFile('log/app_error.log', function (err, data) {
             if (err) {
               throw err;
             }
@@ -315,7 +312,7 @@ describe('JSON Logger middleware', function () {
             var logEntry = JSON.parse(data.toString());
 
             // bunyan property logging
-            logEntry.name.should.equal('myapp');
+            logEntry.name.should.equal('app');
             should.exist(logEntry.uid);
             logEntry.uid.should.match(/^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i);
 
