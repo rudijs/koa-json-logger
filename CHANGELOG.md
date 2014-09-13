@@ -1,6 +1,20 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.0.15 - 2014-09-13
+
+### Added
+- KoaJS dev dependency updated to 0.11.0
+
+### Deprecated
+- Nothing.
+
+### Removed
+- Nothing.
+
+### Fixed
+- Nothing.
+
 ## 0.0.14 - 2014-08-23
 
 ### Added
