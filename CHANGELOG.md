@@ -1,6 +1,20 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.0.19 - 2014-12-04
+
+### Added
+- Package dependency updates
+
+### Deprecated
+- Nothing.
+
+### Removed
+- Nothing.
+
+### Fixed
+- Nothing.
+
 ## 0.0.18 - 2014-11-06
 
 ### Added
