@@ -78,7 +78,7 @@ describe('JSON Logger middleware', function () {
             // response logging
             logEntry.res.statusCode.should.equal(200);
             should.exist(logEntry.res.responseTime);
-            logEntry.res.headers['x-powered-by'].should.equal('koa');
+            logEntry.res.headers['content-type'].should.equal('text/plain; charset=utf-8');
 
             done();
           });
@@ -141,11 +141,11 @@ describe('JSON Logger middleware', function () {
             // response logging
             logEntry.res.statusCode.should.equal(500);
             should.exist(logEntry.res.responseTime);
-            logEntry.res.headers['x-powered-by'].should.equal('koa');
+            should.exist(logEntry.res.headers);
 
             // error logging
             logEntry.err.message.should.match(/Something\ blew\ up/);
-            logEntry.err.name.should.equal('Error');
+            logEntry.err.name.should.equal('InternalServerError');
             logEntry.err.stack.should.match(/Something\ blew\ up/);
 
             done();
@@ -202,11 +202,11 @@ describe('JSON Logger middleware', function () {
             // response logging
             logEntry.res.statusCode.should.equal(400);
             should.exist(logEntry.res.responseTime);
-            logEntry.res.headers['x-powered-by'].should.equal('koa');
+            should.exist(logEntry.res.headers);
 
             // error logging
             logEntry.err.message.should.equal('Bad URL parameter format');
-            logEntry.err.name.should.equal('Error');
+            logEntry.err.name.should.equal('BadRequestError');
             logEntry.err.stack.should.match(/Bad\ URL\ parameter\ format/);
 
             done();
@@ -260,7 +260,7 @@ describe('JSON Logger middleware', function () {
             // response logging
             logEntry.res.statusCode.should.equal(500);
             should.exist(logEntry.res.responseTime);
-            logEntry.res.headers['x-powered-by'].should.equal('koa');
+            should.exist(logEntry.res.headers);
 
             // error logging
             logEntry.err.message.should.match(/Something\ blew\ up/);
@@ -324,12 +324,11 @@ describe('JSON Logger middleware', function () {
             // response logging
             logEntry.res.statusCode.should.equal(500);
             should.exist(logEntry.res.responseTime);
-            logEntry.res.headers['x-powered-by'].should.equal('koa');
             logEntry.res.headers['content-type'].should.equal('application/vnd.api+json');
 
             // error logging
             logEntry.err.message.should.match(/Something\ blew\ up/);
-            logEntry.err.name.should.equal('Error');
+            logEntry.err.name.should.equal('InternalServerError');
             logEntry.err.stack.should.match(/Something\ blew\ up/);
 
             done();
