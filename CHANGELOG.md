@@ -1,6 +1,21 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.0.19 - 2015-03-03
+
+### Added
+- Package dependency updates.
+- Unit test updates.
+
+### Deprecated
+- Nothing.
+
+### Removed
+- Nothing.
+
+### Fixed
+- Nothing.
+
 ## 0.0.18 - 2014-11-06
 
 ### Added
