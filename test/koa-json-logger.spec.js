@@ -372,6 +372,39 @@ describe('JSON Logger middleware', function () {
 
     });
 
+    it('should receive logs on stdout/stderr', function(done) {
+
+      app.use(koaJsonLogger(
+        {path: null}
+      ));
+
+      // default route for test
+      app.use(function *route1(next) {
+        this.body = 'Test Response is OK.';
+        yield next;
+      });
+
+      request(app.listen())
+        .get('/')
+        .expect(200)
+        .end(function (err, res) {
+          if (err) {
+            should.not.exist(err);
+            return done(err);
+          }
+
+          // test http response
+          res.text.should.equal('Test Response is OK.');
+
+
+          fs.existsSync('log/app.log').should.be.false;
+
+          done();
+
+        });
+
+    });
+
   });
 
 });
