@@ -1,6 +1,6 @@
 {
   "name": "koa-json-logger",
-  "version": "0.0.19",
+  "version": "0.0.20",
   "description": "KoaJS HTTP Request/Response/Error JSON format logger",
   "repository": {
     "type": "git",
@@ -23,24 +23,30 @@
     "name": "Rudi Starcevic",
     "email": "ooly.me@gmail.com"
   },
+  "contributors": [
+    {
+      "name": "Jordan Sexton",
+      "email": "jordan@jordansexton.com"
+    }
+  ],
   "license": "MIT",
   "engines": {
     "node": ">=0.11.16",
     "iojs": ">= 1.0.0"
   },
   "devDependencies": {
-    "chai": "^2.1.0",
+    "chai": "^3.0.0",
     "coveralls": "^2.11.2",
-    "istanbul-harmony": "^0.3.1",
-    "jshint": "^2.5.10",
-    "koa": "^0.18.1",
-    "mocha": "^2.0.1",
-    "sinon": "^1.12.1",
+    "istanbul-harmony": "^0.3.12",
+    "jshint": "^2.8.0",
+    "koa": "^0.21.0",
+    "mocha": "^2.2.5",
+    "sinon": "^1.15.0",
     "supertest": "^0.15.0"
   },
   "dependencies": {
-    "bunyan": "^1.2.3",
-    "lodash": "^3.3.1",
+    "bunyan": "^1.4.0",
+    "lodash": "^3.9.3",
     "uuid": "^2.0.1"
   }
 }
