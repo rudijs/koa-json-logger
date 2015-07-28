@@ -1,6 +1,6 @@
 {
   "name": "koa-json-logger",
-  "version": "0.0.20",
+  "version": "0.0.21",
   "description": "KoaJS HTTP Request/Response/Error JSON format logger",
   "repository": {
     "type": "git",
@@ -35,13 +35,14 @@
     "iojs": ">= 1.0.0"
   },
   "devDependencies": {
-    "chai": "^3.0.0",
-    "coveralls": "^2.11.2",
-    "istanbul-harmony": "^0.3.12",
+    "chai": "^3.2.0",
+    "coveralls": "^2.11.3",
+    "istanbul-harmony": "^0.3.16",
     "jshint": "^2.8.0",
     "koa": "^0.21.0",
+    "lodash": "^3.10.0",
     "mocha": "^2.2.5",
-    "sinon": "^1.15.0",
+    "sinon": "^1.15.4",
     "supertest": "^0.15.0"
   },
   "dependencies": {
