@@ -1,6 +1,6 @@
 {
   "name": "koa-json-logger",
-  "version": "0.0.22",
+  "version": "1.0.0",
   "description": "KoaJS HTTP Request/Response/Error JSON format logger",
   "repository": {
     "type": "git",
