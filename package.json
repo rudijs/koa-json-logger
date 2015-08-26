@@ -36,17 +36,17 @@
   },
   "devDependencies": {
     "chai": "^3.2.0",
-    "coveralls": "^2.11.3",
+    "coveralls": "^2.11.4",
     "istanbul-harmony": "^0.3.16",
     "jshint": "^2.8.0",
-    "koa": "^0.21.0",
+    "koa": "^1.0.0",
     "mocha": "^2.2.5",
-    "sinon": "^1.15.4",
+    "sinon": "^1.16.1",
     "supertest": "^0.15.0"
   },
   "dependencies": {
     "bunyan": "^1.4.0",
-    "lodash": "^3.10.0",
+    "lodash": "^3.10.1",
     "uuid": "^2.0.1"
   }
 }
