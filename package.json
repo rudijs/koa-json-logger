@@ -35,17 +35,17 @@
     "iojs": ">= 1.0.0"
   },
   "devDependencies": {
-    "chai": "^3.2.0",
+    "chai": "^3.3.0",
     "coveralls": "^2.11.4",
     "istanbul-harmony": "^0.3.16",
     "jshint": "^2.8.0",
-    "koa": "^1.0.0",
-    "mocha": "^2.2.5",
-    "sinon": "^1.16.1",
+    "koa": "^1.1.0",
+    "mocha": "^2.3.3",
+    "sinon": "^1.17.1",
     "supertest": "^0.15.0"
   },
   "dependencies": {
-    "bunyan": "^1.4.0",
+    "bunyan": "^1.5.1",
     "lodash": "^3.10.1",
     "uuid": "^2.0.1"
   }
