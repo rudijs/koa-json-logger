@@ -60,7 +60,7 @@ Below will be some sample log entries in pretty print and also some screen shots
 I suggest it's best to use this middleware high in the middleware stack so any and all downstream errors are logged.
 
 Logs will go into a `log/` directory relative to file that instruments the Koa app, so you'll need to create this folder.
- 
+
 Default use will create two log files:
 
 `log/app.log` will contain req/res log entries.
@@ -76,6 +76,10 @@ Current config options are:
 - `path` (String default: 'log') configures the log directory (relative) to use.
 
 - `jsonapi` (Boolean default: false) will set the response Content-type to application/vnd.api+json and ensure 500 responses are in JSON API format
+
+- `outStreams` (Array default: null) adds additional streams to bunyan logger
+
+- `errStreams` (Array default: null) adds additional streams to bunyan error logger
 
 Example:
 
@@ -250,4 +254,3 @@ git clone the full repo: `git clone git@github.com:rudijs/koa-json-logger.git`
 
 
 ![Kibana Error Screenshot](examples/kibana_error_log_entry.png)
-

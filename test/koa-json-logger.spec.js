@@ -216,6 +216,68 @@ describe('JSON Logger middleware', function () {
 
     });
 
+    it('should allow additional streams', function (done) {
+      var stdErrStream = { level: 'error', stream: process.stderr };
+
+      app.use(koaJsonLogger({ errStreams: [stdErrStream] }));
+
+      // 1st default test route that will catch uncaught downstream errors
+      app.use(function *route1(next) {
+
+        // throw a custom application error
+        this.throw(400, 'Bad URL parameter format');
+        yield next;
+      });
+
+      request(app.listen())
+        .get('/')
+        .expect(400)
+        .end(function (err, res) {
+          if (err) {
+            should.not.exist(err);
+            return done(err);
+          }
+
+          // should not leak out internal server error messages on 500
+          // standard error response for the user
+          res.text.should.equal('Bad URL parameter format');
+
+          // read in log file entry
+          fs.readFile('log/app_error.log', function (err, data) {
+            if (err) {
+              throw err;
+            }
+
+            // test JSON parsed log entry
+            var logEntry = JSON.parse(data.toString());
+
+            // bunyan property logging
+            logEntry.name.should.equal('app');
+            should.exist(logEntry.uid);
+            logEntry.uid.should.match(/^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i);
+
+            // request logging
+            logEntry.req.method.should.equal('GET');
+            logEntry.req.url.should.equal('/');
+            should.exist(logEntry.req.headers);
+
+            // response logging
+            logEntry.res.statusCode.should.equal(400);
+            should.exist(logEntry.res.responseTime);
+            should.exist(logEntry.res.headers);
+
+            // error logging
+            logEntry.err.message.should.equal('Bad URL parameter format');
+            logEntry.err.name.should.equal('BadRequestError');
+            logEntry.err.stack.should.match(/Bad\ URL\ parameter\ format/);
+
+            done();
+          });
+
+        });
+
+    });
+
     it('should default to 500 error status code', function (done) {
 
       app.use(koaJsonLogger());
