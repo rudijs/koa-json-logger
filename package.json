@@ -1,6 +1,6 @@
 {
   "name": "koa-json-logger",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "KoaJS HTTP Request/Response/Error JSON format logger",
   "repository": {
     "type": "git",
@@ -9,7 +9,8 @@
   "main": "./lib/koa-json-logger.js",
   "scripts": {
     "test": "node --harmony node_modules/istanbul-harmony/lib/cli.js cover node_modules/mocha/bin/_mocha --root lib/ --dir test/coverage  -- -u exports -R spec",
-    "coveralls": "node --harmony node_modules/istanbul-harmony/lib/cli.js cover node_modules/mocha/bin/_mocha --root lib/ --dir test/coverage  -- -u exports -R spec && cat ./test/coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
+    "coveralls": "node --harmony node_modules/istanbul-harmony/lib/cli.js cover node_modules/mocha/bin/_mocha --root lib/ --dir test/coverage  -- -u exports -R spec && cat ./test/coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
+    "lint": "jshint lib/ && jshint test/*.js"
   },
   "keywords": [
     "koa",
@@ -35,18 +36,18 @@
     "iojs": ">= 1.0.0"
   },
   "devDependencies": {
-    "chai": "^3.3.0",
-    "coveralls": "^2.11.4",
+    "chai": "^3.4.1",
+    "coveralls": "^2.11.6",
     "istanbul-harmony": "^0.3.16",
-    "jshint": "^2.8.0",
-    "koa": "^1.1.0",
-    "mocha": "^2.3.3",
-    "sinon": "^1.17.1",
+    "jshint": "^2.9.1",
+    "koa": "^1.1.2",
+    "mocha": "^2.3.4",
+    "sinon": "^1.17.2",
     "supertest": "^0.15.0"
   },
   "dependencies": {
     "bunyan": "^1.5.1",
-    "lodash": "^3.10.1",
+    "lodash": "^4.0.0",
     "uuid": "^2.0.1"
   }
 }

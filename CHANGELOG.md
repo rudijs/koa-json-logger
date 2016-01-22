@@ -1,6 +1,21 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.0.2 - 2016-01-22
+
+### Added
+- Package dependency updates.
+- Add NPM lint script.
+
+### Deprecated
+- Nothing.
+
+### Removed
+- Nothing.
+
+### Fixed
+- Nothing.
+
 ## 1.0.1 - 2015-10-20
 
 ### Added

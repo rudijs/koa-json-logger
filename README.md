@@ -3,10 +3,10 @@ koa-json-logger
 
 KoaJS HTTP Request/Response/Error JSON format logger.
 
-[![Build Status](https://travis-ci.org/rudijs/koa-json-logger.svg?branch=master)](https://travis-ci.org/rudijs/koa-json-logger)  
-[![Coverage Status](https://coveralls.io/repos/rudijs/koa-json-logger/badge.png?branch=master)](https://coveralls.io/r/rudijs/koa-json-logger?branch=master)  
-[![NPM version](https://badge.fury.io/js/koa-json-logger.svg)](http://badge.fury.io/js/koa-json-logger)  
-[![Dependency Status](https://gemnasium.com/rudijs/koa-json-logger.svg)](https://gemnasium.com/rudijs/koa-json-logger)  
+[![Build Status](https://travis-ci.org/rudijs/koa-json-logger.svg?branch=master)](https://travis-ci.org/rudijs/koa-json-logger)
+[![Coverage Status](https://coveralls.io/repos/rudijs/koa-json-logger/badge.png?branch=master)](https://coveralls.io/r/rudijs/koa-json-logger?branch=master)
+[![NPM version](https://badge.fury.io/js/koa-json-logger.svg)](http://badge.fury.io/js/koa-json-logger)
+[![Dependency Status](https://gemnasium.com/rudijs/koa-json-logger.svg)](https://gemnasium.com/rudijs/koa-json-logger)
 
 The actual logging is done with [node-bunyan](https://github.com/trentm/node-bunyan)
 
@@ -60,7 +60,7 @@ Below will be some sample log entries in pretty print and also some screen shots
 I suggest it's best to use this middleware high in the middleware stack so any and all downstream errors are logged.
 
 Logs will go into a `log/` directory relative to file that instruments the Koa app, so you'll need to create this folder.
- 
+
 Default use will create two log files:
 
 `log/app.log` will contain req/res log entries.
@@ -138,9 +138,7 @@ git clone the full repo: `git clone git@github.com:rudijs/koa-json-logger.git`
 
 ## Code Linting
 
-`./node_modules/jshint/bin/jshint lib/**/*.js`
-
-`./node_modules/jshint/bin/jshint test/*.js`
+`npm run lint`
 
 
 ## Sample Success Log Entry (pretty print)
