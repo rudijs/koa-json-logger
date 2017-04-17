@@ -77,6 +77,10 @@ Current config options are:
 
 - `jsonapi` (Boolean default: false) will set the response Content-type to application/vnd.api+json and ensure 500 responses are in JSON API format
 
+- `outStreams` (Array default: null) adds additional streams to bunyan logger
+
+- `errStreams` (Array default: null) adds additional streams to bunyan error logger
+
 Example:
 
       app.use(koaJsonLogger({
@@ -248,4 +252,3 @@ git clone the full repo: `git clone git@github.com:rudijs/koa-json-logger.git`
 
 
 ![Kibana Error Screenshot](examples/kibana_error_log_entry.png)
-
