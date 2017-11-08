@@ -89,7 +89,7 @@ When you throw an application error it's best to always use [throw](https://gith
 
 Example:
 
-    `this.throw(403, 'Access Denied');`
+    this.throw(403, 'Access Denied');
 
 See the docs for [throw](https://github.com/koajs/koa/blob/master/docs/api/context.md#ctxthrowmsg-status-properties) details.
 
