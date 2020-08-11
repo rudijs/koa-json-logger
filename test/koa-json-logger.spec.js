@@ -61,7 +61,7 @@ describe('JSON Logger middleware', function () {
             if (err) {
               throw err;
             }
-
+            
             // test JSON parsed log entry
             var logEntry = JSON.parse(data.toString());
 
