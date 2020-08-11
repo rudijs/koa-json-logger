@@ -82,7 +82,9 @@ Example:
       app.use(koaJsonLogger({
         name: 'myCoolApp',
         path: 'logs',
-        jsonapi: true
+        jsonapi: true,
+		bodyLog: true,
+  		healthCheckName: '/health-check',
       }));
 
 When you throw an application error it's best to always use [throw](https://github.com/koajs/koa/blob/master/docs/api/context.md#ctxthrowmsg-status-properties)
